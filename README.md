@@ -116,8 +116,6 @@ All output tables and figures are saved to `.\results\`. Key outputs include:
 
 ---
 
----
-
 ## References
 
 - Acemoglu, D., & Autor, D. (2011). Skills, Tasks and Technologies: Implications for Employment and Earnings. In D. Card, & O. Ashenfelter (Eds.), *Handbook of Labor Economics* Vol. 4, Part B (pp. 1043-1171). Amsterdam: Elsevier. https://doi.org/10.1016/S0169-7218(11)02410-5
