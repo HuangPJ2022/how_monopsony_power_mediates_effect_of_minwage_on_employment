@@ -74,7 +74,7 @@ estimates clear
 binscatter newRecruit_rate kaitz_syqi, ///
     ytitle("The Fraction of New Recruits from Non-employment") ///
     xtitle("Kaitz Index (state-qrt-ind)") ///
-    title("Monopsony Power and Wage Compression") ///
+    title("Monopsony Power and Kaitz Index") ///
     line(lfit) ///
     yscale(range(0 1)) ///
     ylabel(0(0.2)1) ///
