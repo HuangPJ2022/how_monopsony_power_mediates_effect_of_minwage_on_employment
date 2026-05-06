@@ -1,0 +1,76 @@
+==========================================
+
+PRE-TREND TEST: Base D (H0: v_j jointly zero)
+------------------------------------------
+Wald test, H0: joint nullity of j::-3:D, j::-2:D, j::-3:D_mono and j::-2:D_mono
+ stat = 1.09844, p-value = 0.367902, on 4 and 49 DoF, VCOV: Clustered (statefips).$stat
+[1] 1.09844
+
+$p
+[1] 0.3679019
+
+$df1
+[1] 4
+
+$df2
+[1] 49
+
+$vcov
+[1] "Clustered (statefips)"
+
+
+PRE-TREND TEST: Mono (H0: lambda_j jointly zero)
+------------------------------------------
+Wald test, H0: joint nullity of j::-3:D_mono and j::-2:D_mono
+ stat = 0.239902, p-value = 0.787623, on 2 and 49 DoF, VCOV: Clustered (statefips).$stat
+[1] 0.2399021
+
+$p
+[1] 0.7876235
+
+$df1
+[1] 2
+
+$df2
+[1] 49
+
+$vcov
+[1] "Clustered (statefips)"
+
+
+PRE-TREND TEST: All (H0: v_j and lambda_j jointly zero)
+------------------------------------------
+Wald test, H0: joint nullity of j::-3:D, j::-2:D, j::-3:D_mono and j::-2:D_mono
+ stat = 1.09844, p-value = 0.367902, on 4 and 49 DoF, VCOV: Clustered (statefips).$stat
+[1] 1.09844
+
+$p
+[1] 0.3679019
+
+$df1
+[1] 4
+
+$df2
+[1] 49
+
+$vcov
+[1] "Clustered (statefips)"
+
+
+PRE-TREND TEST: Mono parallel linear
+------------------------------------------
+
+Linear hypothesis test:
+j::-3:D_mono - j::-2:D_mono = 0
+
+Model 1: restricted model
+Model 2: emp_ratio ~ i(j, D, ref = -1) + i(j, D_mono, ref = -1) + skill_score1 + 
+    skill_score2 + skill_score3 + skill_score4 + skill_score5 + 
+    skill_score6 | ind1990 + statefips + ind1990^statefips + 
+    statefips^year + ind1990^year
+
+Note: Coefficient covariance matrix supplied.
+
+  Res.Df Df  Chisq Pr(>Chisq)
+1 465206                     
+2 465205  1 0.4271     0.5134

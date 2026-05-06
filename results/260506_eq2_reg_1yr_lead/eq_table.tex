@@ -1,0 +1,50 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Placebo: 1-Year Lead},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]},
+hline{2}={1-2}{solid, black, 0.05em},
+hline{24}={1-2}{solid, black, 0.05em},
+hline{1}={1-2}{solid, black, 0.08em},
+hline{34}={1-2}{solid, black, 0.08em},
+column{2}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) \\
+j=-3 × D & \num{-0.0005} \\
+& (\num{0.0083}) \\
+j=-2 × D & \num{0.0050} \\
+& (\num{0.0078}) \\
+j=0 × D & \num{-0.0029} \\
+& (\num{0.0119}) \\
+j=1 × D & \num{0.0076} \\
+& (\num{0.0094}) \\
+j=2 × D & \num{0.0103} \\
+& (\num{0.0093}) \\
+j=3 × D & \num{0.0180}** \\
+& (\num{0.0071}) \\
+j=4 × D & \num{0.0064} \\
+& (\num{0.0077}) \\
+college & \num{0.5330}*** \\
+& (\num{0.1771}) \\
+female & \num{-0.1748} \\
+& (\num{0.4900}) \\
+age & \num{-0.0090} \\
+& (\num{0.0062}) \\
+black & \num{-0.2853} \\
+& (\num{0.1785}) \\
+Num.Obs. & \num{18779} \\
+R2 & \num{0.826} \\
+R2 Adj. & \num{0.825} \\
+R2 Within & \num{0.008} \\
+R2 Within Adj. & \num{0.007} \\
+AIC & \num{-38235.5} \\
+BIC & \num{-37576.9} \\
+RMSE & \num{0.09} \\
+FE: statefips & X \\
+FE: year & X \\
+\end{talltblr}
+\end{table}
