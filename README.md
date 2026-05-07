@@ -76,6 +76,7 @@ All programmes are saved to `.\code\`.
 |---|---|
 | `compute_avg_coverage_by_gr_mw.do` | Computes average minimum wage coverage (share of affected workers) separately for events with ≥5% and ≥10% wage growth rates. |
 | `state_graph.R` | Generates state-level maps of monopsony power and plots of minimum wage policy changes over time by state. *(coded collaboratively with Claude)* |
+| `summary_stats.R` | Generates summary statistics. *(coded collaboratively with Claude)* |
 | `eq1_regression.do` | **(Stata)** Estimates Model 1 — OLS regression of wage compression (Kaitz index and MW coverage rate) on monopsony power, with and without a squared term and industry/state/time fixed effects; produces Table 2 and Figure 3. |
 | `eq2_regression.R` | **(R)** Estimates Model 2 — event-study effect of minimum wage increases on log average real wage in low-wage industries. *(coded collaboratively with Claude)* |
 | `eq2_regression_1yr_lead_placebo.R` | **(R)** Placebo test for Model 2: uses one year prior to the actual event as a false treatment date to test for pre-existing trends. *(coded collaboratively with Claude)* |
@@ -113,6 +114,7 @@ All output tables and figures are saved to `.\results\`. Key outputs include:
 | `260506_eq2_reg_1yr_lead` / `_top20` | Placebo tests for Eq. 2 |
 | `260506_eq3_reg_1yr_lead` / `_top20` | Placebo tests for Eq. 3 |
 | `260506_state_graph` | State maps and policy change plots |
+| `260507_summary_stats` | Summary statistics |
 
 ---
 
