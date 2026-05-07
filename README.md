@@ -1,4 +1,4 @@
-# Replication Package: Minimum Wage Effect and Monopsony Power
+# Replication Package: Monopsony power and the employment effect of minimum wage increases: Evidence from the U.S.
 
 > **Data Availability:** Data files are not uploaded to this repository due to size constraints. Please refer to the data sources listed below to obtain the raw data or contact Po-Jui Huang (hpj707024@gmail.com) directly.
 
