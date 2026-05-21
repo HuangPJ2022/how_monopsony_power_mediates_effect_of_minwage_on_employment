@@ -1,6 +1,6 @@
 # ==============================
 # Author: Po-Jui Huang (code with Claude together)
-# Date: 6th May 2026
+# Date: 6th May, 18th May 2026
 # Goal: Estimates Model 2 — placebo test(top 20% high wage industries withn each state)
 # Sample: events which increased state mw over 10%. + the top 20% high wage industries within each state
 # ==============================
@@ -16,7 +16,7 @@ library(car)
 library(readr)
 
 setwd("my path")
-outdir <- "results/260506_eq2_reg_placebo_top20"
+outdir <- "results/260518_eq2_placebo_top20"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # ==============================================================
@@ -180,8 +180,8 @@ p <- ggplot(df_coef, aes(x = j)) +
   geom_hline(yintercept = 0, color = "black", linewidth = 0.3) +
   scale_x_continuous(breaks = -3:4) +
   labs(x = "Years relative to MW hike",
-       y = "Effect on log real hourly wage",
-       title = "Placebo: Top 20% Wage Industries") +
+       y = "Effect on log average real wage",
+       title = "Placebo: the Wage Effect of the Minimum Wage Increases \n — Top 20% High-Wage Industries") +
   theme_minimal(base_size = 12) +
   theme(panel.grid.minor = element_blank(),
         plot.title = element_text(hjust = 0.5))

@@ -1,6 +1,6 @@
 # ==============================
 # Author: Po-Jui Huang (code with Claude together)
-# Date: 6th May 2026
+# Date: 6th May, 18th May 2026
 # Goal: Estimates Model 2 — placebo test(1yr lead before treatment)
 # Sample: events which increased state mw over 10%. + the bottom 20% low wage industries within each state
 # ==============================
@@ -15,7 +15,7 @@ library(car)
 library(readr)
 
 setwd("my path")
-outdir <- "results/260506_eq2_reg_1yr_lead"
+outdir <- "results/260518_eq2_reg_1yr_lead"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # ==============================================================
@@ -181,9 +181,9 @@ p <- ggplot(df_coef, aes(x = j)) +
   geom_vline(xintercept = -0.5, color = "red", linewidth = 0.3) +
   geom_hline(yintercept = 0, color = "black", linewidth = 0.3) +
   scale_x_continuous(breaks = -2:5) +
-  labs(x = "Years relative to Placebo MW hike",
-       y = "Effect on log real hourly wage",
-       title = "Placebo: 1-Year Lead") +
+  labs(x = "Years relative to placebo MW hike",
+       y = "Effect on log average real wage",
+       title = "Placebo: the Wage Effect of the Minimum Wage Increases — 1-Year Lead") +
   theme_minimal(base_size = 12) +
   theme(panel.grid.minor = element_blank(),
         plot.title = element_text(hjust = 0.5))

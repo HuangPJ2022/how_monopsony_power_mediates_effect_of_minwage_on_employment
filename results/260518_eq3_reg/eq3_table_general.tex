@@ -1,0 +1,57 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Regression Results of Equation (3) — General Effect},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]},
+hline{2}={1-2}{solid, black, 0.05em},
+hline{28}={1-2}{solid, black, 0.05em},
+hline{1}={1-2}{solid, black, 0.08em},
+hline{41}={1-2}{solid, black, 0.08em},
+column{2}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) \\
+j=-3 × D & \num{-0e+00} \\
+& (\num{0.0000}) \\
+j=-2 × D & \num{0e+00} \\
+& (\num{0.0000}) \\
+j=0 × D & \num{-0e+00}* \\
+& (\num{0.0000}) \\
+j=1 × D & \num{-0e+00} \\
+& (\num{0.0000}) \\
+j=2 × D & \num{-0e+00} \\
+& (\num{0.0000}) \\
+j=3 × D & \num{-0e+00} \\
+& (\num{0.0000}) \\
+j=4 × D & \num{-0e+00} \\
+& (\num{0.0000}) \\
+skill\_score1 & \num{0e+00} \\
+& (\num{0.0000}) \\
+skill\_score2 & \num{1e-04}*** \\
+& (\num{0.0000}) \\
+skill\_score3 & \num{-0e+00} \\
+& (\num{0.0000}) \\
+skill\_score4 & \num{-0e+00} \\
+& (\num{0.0000}) \\
+skill\_score5 & \num{0e+00}*** \\
+& (\num{0.0000}) \\
+skill\_score6 & \num{1e-04}** \\
+& (\num{0.0000}) \\
+Num.Obs. & \num{479176} \\
+R2 & \num{0.977} \\
+R2 Adj. & \num{0.977} \\
+R2 Within & \num{0.000} \\
+R2 Within Adj. & \num{0.000} \\
+AIC & \num{-5552455.3} \\
+BIC & \num{-5397747.7} \\
+RMSE & \num{0.00} \\
+FE: ind1990 & X \\
+FE: statefips & X \\
+FE: ind1990\textasciicircum{}statefips & X \\
+FE: statefips\textasciicircum{}year & X \\
+FE: ind1990\textasciicircum{}year & X \\
+\end{talltblr}
+\end{table}

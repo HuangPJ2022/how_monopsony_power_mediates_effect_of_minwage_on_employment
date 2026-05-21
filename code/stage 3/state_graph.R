@@ -1,6 +1,6 @@
 # ==============================
 # Author: Po-Jui Huang (code with Claude together)
-# Date: 21st Apr., 6th May 2026
+# Date: 21st Apr., 6th May, 7th May 2026
 # Goal: Generates plots about monopsony power or minimum wage policy changes over time by state.
 # ==============================
 
@@ -116,7 +116,8 @@ p <- ggplot(policy_plot, aes(x = year, y = stateabb)) +
     panel.background = element_rect(fill = "white", color = NA),
     panel.grid = element_blank(),
     axis.text.y = element_text(size = 10, family = "mono", color = "black"),
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "bottom"
   ) +
   labs(x = NULL, y = NULL, fill = "MW increase",
        title = "State Minimum Wage Changes, 1990–2016")

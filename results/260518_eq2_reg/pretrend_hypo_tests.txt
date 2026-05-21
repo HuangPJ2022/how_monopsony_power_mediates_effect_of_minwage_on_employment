@@ -1,0 +1,59 @@
+==========================================
+GENERAL SAMPLE
+==========================================
+Wald test, H0: joint nullity of j_annual::-3:D and j_annual::-2:D
+ stat = 0.406574, p-value = 0.668153, on 2 and 49 DoF, VCOV: Clustered (statefips).$stat
+[1] 0.4065743
+
+$p
+[1] 0.6681533
+
+$df1
+[1] 2
+
+$df2
+[1] 49
+
+$vcov
+[1] "Clustered (statefips)"
+
+
+==========================================
+HIGH MONOPSONY SAMPLE
+==========================================
+Wald test, H0: joint nullity of j_annual::-3:D and j_annual::-2:D
+ stat = 0.109844, p-value = 0.896194, on 2 and 49 DoF, VCOV: Clustered (statefips).$stat
+[1] 0.1098439
+
+$p
+[1] 0.896194
+
+$df1
+[1] 2
+
+$df2
+[1] 49
+
+$vcov
+[1] "Clustered (statefips)"
+
+
+==========================================
+NON-HIGH MONOPSONY SAMPLE
+==========================================
+Wald test, H0: joint nullity of j_annual::-3:D and j_annual::-2:D
+ stat = 1.78638, p-value = 0.178305, on 2 and 49 DoF, VCOV: Clustered (statefips).$stat
+[1] 1.786384
+
+$p
+[1] 0.1783048
+
+$df1
+[1] 2
+
+$df2
+[1] 49
+
+$vcov
+[1] "Clustered (statefips)"
+

@@ -1,6 +1,6 @@
 # ==============================
 # Author: Po-Jui Huang (code with Claude together)
-# Date: 6th May 2026
+# Date: 6th May, 7th May, 18th May 2026
 # Goal: Estimates Model 3 — placebo test(top 20% high wage industries withn each state)
 # Sample: events which increased state mw over 10%. + the top 20% high wage industries within each state
 # ==============================
@@ -14,7 +14,7 @@ library(modelsummary)
 library(car)
 
 setwd("my path")
-outdir <- "results/260506_eq3_reg_placebo_top20"
+outdir <- "results/260518_eq3_reg_placebo_top20"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # ==============================================================
@@ -226,7 +226,7 @@ p <- ggplot(df_plot, aes(x = j)) +
   labs(x = "Years relative to MW hike",
        y = "Effect on employment ratio",
        color = NULL,
-       title = "Placebo: Top 20% Wage — Employment by Monopsony Power") +
+       title = "Placebo: the Employment Effect of the Minimum Wage Increases \n — Top 20% High-Wage Industries") +
   theme_minimal(base_size = 12) +
   theme(panel.grid.minor = element_blank(),
         legend.position = "bottom",
@@ -235,4 +235,28 @@ p <- ggplot(df_plot, aes(x = j)) +
 ggsave(file.path(outdir, paste0("event_study_placebo_top20.png")), p,
        width = 8, height = 5, dpi = 300)
 
+# ==============================================================
+# 9. Pre-trend Test(hypothesis testing)
+# ==============================================================
+sink(file.path(outdir, paste0("pretrend_placebo_top20.txt")))
+
+cat("==========================================\n\n")
+
+cat("PRE-TREND TEST: Base D (H0: v_j jointly zero)\n")
+cat("------------------------------------------\n")
+print(wald(est, paste0("j::", pre_j, ":D")))
+
+cat("\nPRE-TREND TEST: Mono (H0: lambda_j jointly zero)\n")
+cat("------------------------------------------\n")
+print(wald(est, paste0("j::", pre_j, ":D_mono")))
+
+cat("\nPRE-TREND TEST: All (H0: v_j and lambda_j jointly zero)\n")
+cat("------------------------------------------\n")
+print(wald(est, c(paste0("j::", pre_j, ":D"), paste0("j::", pre_j, ":D_mono"))))
+
+cat("\nPRE-TREND TEST: Mono parallel linear\n")
+cat("------------------------------------------\n")
+print(linearHypothesis(est, "j::-3:D_mono - j::-2:D_mono = 0", vcov = vcov(est)))
+
+sink()
 

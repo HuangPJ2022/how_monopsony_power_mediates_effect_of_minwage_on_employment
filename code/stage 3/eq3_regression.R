@@ -1,6 +1,6 @@
 # ==============================
 # Author: Po-Jui Huang (code with Claude together)
-# Date: 6th May 2026
+# Date: 6th May, 8th May, 18th May 2026
 # Goal: Estimates Model 3 — the effect of minimum wage increases on employment ratio
 # Sample: events which increased state mw over 10%. + the bottom 20% low wage industries within each state
 # ==============================
@@ -14,7 +14,7 @@ library(modelsummary)
 library(car)
 
 setwd("my path")
-outdir <- "results/260506_eq3_reg"
+outdir <- "results/260518_eq3_reg"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # ==============================================================
@@ -118,7 +118,67 @@ rows_base <- list() ## contain coef.
 rows_mono <- list() ## contain coef.
 
 # ==============================================================
-# 6.Regression
+# 6. General regression
+# ==============================================================
+est_general <- feols(
+  emp_ratio ~
+    i(j, D, ref = -1) +
+    skill_score1 + skill_score2 +
+    skill_score3 + skill_score4 +
+    skill_score5 + skill_score6 |
+    ind1990 +
+    statefips +
+    ind1990^statefips +
+    statefips^year +
+    ind1990^year,
+  data = dt_annual[low_wage20 == 1 & gr10 == 1 & j %between% c(-3, 4)],
+  cluster = ~statefips
+)
+
+# --- Export general regression table ---
+cn_g <- names(coef(est_general))
+nice_g <- cn_g |>
+  gsub("j::", "j=", x = _) |>
+  gsub(":D", " × D", x = _)
+cmap_g <- setNames(nice_g, cn_g)
+
+modelsummary(est_general,
+             output   = file.path(outdir, "eq3_table_general.tex"),
+             fmt      = 4,
+             coef_map = cmap_g,
+             stars    = c("*" = 0.1, "**" = 0.05, "***" = 0.01),
+             title    = "Regression Results of Equation (3) — General Effect")
+
+# --- Extract general coefficients ---
+cc_g <- coeftable(est_general)
+get_coef_g <- function(name) {
+  if (name %in% rownames(cc_g)) {
+    b  <- cc_g[name, "Estimate"]
+    se <- cc_g[name, "Std. Error"]
+    return(c(b = b, lo = b - 1.96 * se, hi = b + 1.96 * se))
+  }
+  return(c(b = NA_real_, lo = NA_real_, hi = NA_real_))
+}
+
+rows_general <- list()
+for (jj in pre_j) {
+  rows_general[[length(rows_general) + 1]] <- c(j = jj, get_coef_g(paste0("j::", jj, ":D")))
+}
+rows_general[[length(rows_general) + 1]] <- c(j = -1, b = 0, lo = 0, hi = 0)
+for (jj in post_j) {
+  rows_general[[length(rows_general) + 1]] <- c(j = jj, get_coef_g(paste0("j::", jj, ":D")))
+}
+
+df_general <- as.data.table(do.call(rbind, rows_general))
+setnames(df_general, c("j", "b_gen", "lo_gen", "hi_gen"))
+
+knitr::kable(df_general, format = "latex", booktabs = TRUE, digits = 8,
+             caption = "General effect (no monopsony interaction)") |>
+  writeLines(file.path(outdir, "coef_general.tex"))
+
+
+# ==============================================================
+# 7.Regression interacting with monopsony power
 # ==============================================================
 est <- feols(
   emp_ratio ~
@@ -135,11 +195,8 @@ est <- feols(
   data = dt_annual[low_wage20 == 1 & gr10 == 1 & j %between% c(-3, 4)],
   cluster = ~statefips
 )
-  
-# ==============================================================
-# 7. Export results
-# ==============================================================
-# basic model summary
+
+# --- Extract general coefficients ---
 cn <- names(coef(est))
 nice <- cn |>
   gsub("j::", "j=", x = _) |>
@@ -153,7 +210,7 @@ modelsummary(est,
              coef_map = cmap,
              stars    = c("*" = 0.1, "**" = 0.05, "***" = 0.01),
              title    = paste0("Regression Results of Equation (3)"))
-  
+
 # coef. matrix (easier to read) 
 cc <- coeftable(est)
 get_coef <- function(name) {
@@ -195,48 +252,16 @@ df_mono <- as.data.table(do.call(rbind, rows_mono))
 setnames(df_base, c("j", "b_base", "lo_base", "hi_base"))
 setnames(df_mono, c("j", "b_mono", "lo_mono", "hi_mono"))
 
-knitr::kable(df_base, format = "latex", booktabs = TRUE, digits = 4,
+knitr::kable(df_base, format = "latex", booktabs = TRUE, digits = 8,
              caption = paste0("Non high monopsony")) |>
   writeLines(file.path(outdir, paste0("coef_base.tex")))
 
-knitr::kable(df_mono, format = "latex", booktabs = TRUE, digits = 4,
+knitr::kable(df_mono, format = "latex", booktabs = TRUE, digits = 8,
              caption = paste0("High monopsony")) |>
   writeLines(file.path(outdir, paste0("coef_mono.tex")))
-  
 
 # ==============================================================
-# 8. Plot
-# ==============================================================
-df_plot <- merge(df_base, df_mono, by = "j")
-  
-p <- ggplot(df_plot, aes(x = j)) +
-  geom_errorbar(aes(ymin = lo_base, ymax = hi_base),
-                width = 0.2, color = "gray70", linewidth = 0.4) +
-  geom_errorbar(aes(ymin = lo_mono, ymax = hi_mono),
-                width = 0.2, color = alpha("navy", 0.5), linewidth = 0.4) +
-  geom_line(aes(y = b_base, color = "Non-high monopsony"), linetype = "dashed") +
-  geom_point(aes(y = b_base, color = "Non-high monopsony"), shape = 1, size = 2.5) +
-  geom_line(aes(y = b_mono, color = "High monopsony")) +
-  geom_point(aes(y = b_mono, color = "High monopsony"), shape = 16, size = 2.5) +
-  scale_color_manual(values = c("High monopsony" = "navy",
-                                "Non-high monopsony" = "gray60")) +
-  geom_vline(xintercept = -0.5, color = "red", linewidth = 0.3) +
-  geom_hline(yintercept = 0, color = "black", linewidth = 0.3) +
-  scale_x_continuous(breaks = -3:4) +
-  labs(x = "Years relative to MW hike",
-       y = "Effect on employment ratio",
-       color = NULL,
-       title = "The Impact of Minimum Wage Increases on Employment by Monopsony Power") +
-  theme_minimal(base_size = 12) +
-  theme(panel.grid.minor = element_blank(),
-        legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5))
-  
-  ggsave(file.path(outdir, paste0("event_study_employment.png")), p,
-         width = 8, height = 5, dpi = 300)
-
-# ==============================================================
-# 9. Pre-trend Test(hypothesis testing)
+# 8. Pre-trend Test(hypothesis testing)
 # ==============================================================
 sink(file.path(outdir, paste0("pretrend_hypo_tests.txt")))
 
@@ -259,4 +284,73 @@ cat("------------------------------------------\n")
 print(linearHypothesis(est, "j::-3:D_mono - j::-2:D_mono = 0", vcov = vcov(est)))
 
 sink()
-  
+
+
+# ==============================================================
+# 9. Plot
+# ==============================================================
+# plot: compare three trends
+df_three <- merge(df_general, merge(df_base, df_mono, by = "j"), by = "j") #general, high mono, and non-high mono
+
+p3 <- ggplot(df_three, aes(x = j)) +
+  # General (dark red)
+  geom_errorbar(aes(ymin = lo_gen, ymax = hi_gen),
+                width = 0.2, color = alpha("darkred", 0.4), linewidth = 0.4) +
+  geom_line(aes(y = b_gen, color = "General"), linetype = "dotted") +
+  geom_point(aes(y = b_gen, color = "General"), shape = 17, size = 2.5) +
+  # Non-high mono (gray)
+  geom_errorbar(aes(ymin = lo_base, ymax = hi_base),
+                width = 0.2, color = "gray70", linewidth = 0.4) +
+  geom_line(aes(y = b_base, color = "Non-high monopsony"), linetype = "dashed") +
+  geom_point(aes(y = b_base, color = "Non-high monopsony"), shape = 1, size = 2.5) +
+  # High mono (navy)
+  geom_errorbar(aes(ymin = lo_mono, ymax = hi_mono),
+                width = 0.2, color = alpha("navy", 0.4), linewidth = 0.4) +
+  geom_line(aes(y = b_mono, color = "High monopsony")) +
+  geom_point(aes(y = b_mono, color = "High monopsony"), shape = 16, size = 2.5) +
+  scale_color_manual(values = c("General" = "darkred",
+                                "Non-high monopsony" = "gray60",
+                                "High monopsony" = "navy")) +
+  geom_vline(xintercept = -0.5, color = "red", linewidth = 0.3) +
+  geom_hline(yintercept = 0, color = "black", linewidth = 0.3) +
+  scale_x_continuous(breaks = -3:4) +
+  labs(x = "Years relative to MW hike",
+       y = "Effect on employment ratio",
+       color = NULL,
+       title = "The Employment Effect of the Minimum Wage Increases") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid.minor = element_blank(),
+        legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5))
+
+ggsave(file.path(outdir, "event_study_employment.png"), p3,
+       width = 8, height = 5, dpi = 300)
+
+## plot: compare two trends
+df_plot <- merge(df_base, df_mono, by = "j")
+
+p <- ggplot(df_plot, aes(x = j)) +
+  geom_errorbar(aes(ymin = lo_base, ymax = hi_base),
+                width = 0.2, color = "gray70", linewidth = 0.4) +
+  geom_errorbar(aes(ymin = lo_mono, ymax = hi_mono),
+                width = 0.2, color = alpha("navy", 0.5), linewidth = 0.4) +
+  geom_line(aes(y = b_base, color = "Non-high monopsony"), linetype = "dashed") +
+  geom_point(aes(y = b_base, color = "Non-high monopsony"), shape = 1, size = 2.5) +
+  geom_line(aes(y = b_mono, color = "High monopsony")) +
+  geom_point(aes(y = b_mono, color = "High monopsony"), shape = 16, size = 2.5) +
+  scale_color_manual(values = c("High monopsony" = "navy",
+                                "Non-high monopsony" = "gray60")) +
+  geom_vline(xintercept = -0.5, color = "red", linewidth = 0.3) +
+  geom_hline(yintercept = 0, color = "black", linewidth = 0.3) +
+  scale_x_continuous(breaks = -3:4) +
+  labs(x = "Years relative to MW hike",
+       y = "Effect on employment ratio",
+       color = NULL,
+       title = "The Employment Effect of the Minimum Wage Increases by Monopsony Power") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid.minor = element_blank(),
+        legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5))
+
+ggsave(file.path(outdir, paste0("event_study_by_monopsony.png")), p,
+       width = 8, height = 5, dpi = 300)
